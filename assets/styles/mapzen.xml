@@ -1,5 +1,5 @@
 <rendertheme xmlns="http://opensciencemap.org/rendertheme" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://opensciencemap.org/rendertheme ../../rendertheme.xsd" version="1" map-background="#ebf0d8" >
-	<!-- icons 32 -->
+<!-- icons 32 -->
 	<atlas img="styles/poi_icons_32.png">
 		<rect id="1_airport" pos="0 0 32 32" />
 		<rect id="2_taxi " pos="0 37 32 32" />
@@ -57,12 +57,15 @@
 	<!-- ways -->
 	<m e="way">
 		<!-- parks, playgrounds + labels -->
-		<m select="first">
+		<m k="layer_name" v="landuse" select="first">
+			<m v="urban area" fade="8">
+			  <area fill="#dbe0c8"/>
+			</m>
 			<m v="military" fade="9">
 				<area use="park"/>
 				<line use="park-line" />
 			</m>
-			<m k="kind" v="residential|farmyard" fade="9">
+			<m v="residential|farmyard" fade="9">
 				<area use="park"/>
 				<line use="park-line" />
 			</m>
@@ -96,13 +99,10 @@
 				<area use="park"/>
 				<line use="park-line" />
 			</m>
-			<m v="reservoir|basin">
-				<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.2" />
+			<m select="when-matched" k="name" zoom-min="18">
+			  <text use="park-label" />
 			</m>
-		</m>
-		<m k="name" zoom-min="18">
-			<text use="park-label" />
-		</m>
+	   </m>
 
 		<m k="natural" v="forest|wood|scrub">
 			<m k="wood" v="coniferous|deciduous|mixed" fade="9">
@@ -118,47 +118,43 @@
 		</m>
 
 		<!-- amenity -->
-		<m k="amenity">
-			<m select="first">
-				<m v="kindergarten|school|college|university">
-					<area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
+		<m k="amenity" select="first">
+			<m v="kindergarten|school|college|university">
+				<area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
+			</m>
+			<m v="grave_yard" fade="9">
+				<area use="park"/>
+				<line use="park-line" />
+			</m>
+			<m v="parking">
+				<area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
+				<m k="access" v="private" zoom-min="15">
+					 <area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
 				</m>
-				<m v="grave_yard" fade="9">
-					<area use="park"/>
-					<line use="park-line" />
-				</m>
-				<m v="parking">
-					<area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
-					<m k="access" v="private" zoom-min="15">
-						 <area fill="#ebf0d8" stroke="#d4d8c0" stroke-width="0.2" />
-					</m>
-				</m>
-				<m v="fountain" closed="yes">
-					<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.15" />
-				</m>
-				<m v="hospital" zoom-min="16">
-					<symbol src="13_hospital" />
-				</m>
-				<m v="theatre" zoom-min="16">
-					<symbol src="17_movie_theatre" />
-				</m>
-				<m v="toilets" zoom-min="16">
-					<symbol src="21_toilet" />
-				</m>
+			</m>
+			<m v="fountain" closed="yes">
+				<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.15" />
+			</m>
+			<m v="hospital" zoom-min="16">
+				<symbol src="13_hospital" />
+			</m>
+			<m v="theatre" zoom-min="16">
+				<symbol src="17_movie_theatre" />
+			</m>
+			<m v="toilets" zoom-min="16">
+				<symbol src="21_toilet" />
 			</m>
 		</m>
 
 		<!-- natural -->
-		<m select="first">
-			<m v="coastline">
-				<m closed="no">
-					<line stroke="#708599" fix="true" cap="butt" width="2.0" />
-				</m>
-				<m closed="yes">
-					<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.4" />
-				</m>
+		<!-- <m v="coastline" select="first">
+			<m closed="no">
+				<line stroke="#708599" fix="true" cap="butt" width="2.0" />
 			</m>
-		</m>
+			<m closed="yes">
+				<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.4" />
+			</m>
+		</m> -->
 		<m zoom-min="10">
 			<m v="glacier">
 				<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.8" />
@@ -181,7 +177,11 @@
 		</m>
 
 		<!-- leisure -->
-		<m k="kind">
+		<m k="leisure" select="first">
+			<m v="nature_reserve" fade="9">
+				<area use="park"/>
+				<line use="park-line" />
+			</m>
 			<!-- park labels -->
 			<m v="park|garden|golf_course|common|green" fade="9">
 				<area use="park"/>
@@ -224,22 +224,19 @@
 				<area src="patterns/water_texture.png" fill="#8DB4B7" />
 			</m>
 		</m>
-		<m k="leisure|kind" zoom-min="14">
-			<m v="nature_reserve" fade="9">
-				<area use="park"/>
-				<line use="park-line" />
-			</m>
-		</m>
 
 		<!-- waterways -->
-		<m k="kind">
-			<!-- waterway casings -->
-			<m v="water" zoom-min="0">
+		<m k="layer_name" v="water" select="first">
+			<!-- match kind=water, otherwise we catch all layer_name=water here -->
+			<m k="kind" v="water">
 				<area src="patterns/water_texture.png" fill="#8DB4B7" />
 				<line stroke="#243F3F" width="0.25" cap="butt" />
 				<m zoom-min="13">
 					<caption k="name" size="18" fill="#373737" />
 				</m>
+			</m>
+			<m v="reservoir|basin">
+					<area fill="#8db3b6" stroke="#243F3F" stroke-width="0.2" />
 			</m>
 
 			<!-- waterway cores -->
@@ -439,23 +436,15 @@
 
 	<m e="way">
 		<!-- highway casings -->
-
-		<m k="kind" v="~|no|false">
-			<m k="area" v="~|no|false">
-				<m k="kind">
-					<m k="kind" v="~|no|false">
-						<m v="steps">
-							<line stroke="#d6dac2" width="0.6" />
-						</m>
-						<m v="footway|path">
-							<line stipple-stroke="#A7A89B" width="2.6" stroke="#00A7A89B" stipple="2" stipple-width="1.5" cap="round" fix="true" />
-							<text use="street-label-sm" />
-						</m>
-					</m>
-				</m>
+		<m k="layer_name" v="roads">
+		   <m v="steps">
+				<line stroke="#d6dac2" width="0.6" />
+			</m>
+			<m v="footway|path">
+				<line stipple-stroke="#A7A89B" width="2.6" stroke="#00A7A89B" stipple="2" stipple-width="1.5" cap="round" fix="true" />
+				<text use="street-label-sm" />
 			</m>
 		</m>
-
 		<!-- building -->
 		<m k="layer_name" v="buildings" zoom-min="10">
 			<m closed="yes">
@@ -468,8 +457,19 @@
 				<area fill="#e1e8c9" stroke="#ecaea9" stroke-width="0.75" />
 			</m>
 			<!-- `extrusion`s currently break due to float heights. -->
-			<m zoom-min="17">
-				<extrusion side-color="#c4c8b0" top-color="#e1e8c9" line-color="#ecaea9" />
+			<m zoom-min="17" select="first">
+				<m k="kind" v="house">
+				   <extrusion side-color="#c4c8b0" top-color="#e1e8c9" line-color="#0000ff" />
+				</m>
+				<m k="kind" v="school">
+				  <extrusion side-color="#c4c8b0" top-color="#e1e8c9" line-color="#ff0000" />
+				</m>
+				<m k="kind" v="garages">
+				  <extrusion side-color="#c4c8b0" top-color="#e1e8c9" line-color="#444444" />
+				</m>
+				<m>
+				  <extrusion side-color="#c4c8b0" top-color="#e1e8c9" line-color="#ecaea9" />
+				</m>
 			</m>
 			<m zoom-min="18">
 				<caption k="name" size="16" character-spacing="0.3" fill="#294d6b" stroke="#e4e9cc" stroke-width="1.0"  />
